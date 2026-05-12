@@ -112,7 +112,7 @@ def parsear_sesion(jsonl_path):
             # Recopilar respuesta(s) de assistant a continuacion.
             # Importante: los tool_result tambien tienen type="user" en el JSONL,
             # solo romper cuando es un mensaje real del usuario.
-            texto_claude = ""
+            bloques_claude = []
             tools_turn = []
             j = i + 1
 
@@ -123,8 +123,8 @@ def parsear_sesion(jsonl_path):
                 if tipo_sig == "assistant":
                     content = siguiente.get("message", {}).get("content", [])
                     t = extraer_texto(content)
-                    if t and not texto_claude:
-                        texto_claude = t
+                    if t:
+                        bloques_claude.append(t)
                     # Extraer herramientas usadas en este turn
                     if isinstance(content, list):
                         for item in content:
@@ -139,6 +139,8 @@ def parsear_sesion(jsonl_path):
                     break
                 else:
                     j += 1
+
+            texto_claude = "\n\n".join(bloques_claude)
 
             turns.append({
                 "timestamp": ts_user,

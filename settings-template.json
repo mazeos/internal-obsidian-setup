@@ -31,8 +31,7 @@
           {
             "type": "command",
             "command": "/usr/bin/python3 /Users/{tu-usuario}/.claude/hooks/conversation_capture.py",
-            "timeout": 15,
-            "async": true
+            "timeout": 15
           }
         ]
       }
