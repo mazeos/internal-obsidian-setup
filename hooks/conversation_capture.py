@@ -10,6 +10,7 @@ import sys
 import json
 import os
 import re
+import time
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -234,6 +235,9 @@ def main():
     if not jsonl_path:
         print(json.dumps({}))
         return
+
+    # Esperar a que el JSONL termine de escribirse (race condition con el Stop event)
+    time.sleep(2)
 
     # Parsear sesion
     try:
