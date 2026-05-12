@@ -236,8 +236,14 @@ def main():
         print(json.dumps({}))
         return
 
-    # Esperar a que el JSONL termine de escribirse (race condition con el Stop event)
-    time.sleep(2)
+    # Esperar a que el JSONL deje de crecer antes de leerlo
+    prev_size = -1
+    for _ in range(10):
+        time.sleep(0.5)
+        curr_size = jsonl_path.stat().st_size
+        if curr_size == prev_size:
+            break
+        prev_size = curr_size
 
     # Parsear sesion
     try:
